@@ -1,1 +1,1 @@
-Use this folder (upload) to upload images or videos with multer 
+Use this folder (upload) to upload images with multer 
