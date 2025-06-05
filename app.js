@@ -40,7 +40,7 @@ app.use("/api/questions/",require("./routes/questionRoutes.js"))
 
 //app.use("/api/enrollments/",require("./routes/enrollmentRoutes.js"))
 
-//app.use('/api/payments', require("./routes/paymentRoutes.js"));
+app.use('/api/payments', require("./routes/paymentRoutes.js"));
 
 
 // Error handler middleware
