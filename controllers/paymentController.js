@@ -24,9 +24,9 @@ exports.createCheckoutSession = asyncHandler(async (req, res) => {
   }
 
   // 3. Verify user is a student
-  if (req.user.role !== 'student') {
-    return res.status(403).json({ message: 'Only students can enroll in courses' });
-  }
+  // if (req.user.role !== 'student') {
+  //   return res.status(403).json({ message: 'Only students can enroll in courses' });
+  // }
 
   // 4. Check if already enrolled
   const existingEnrollment = await Enrollment.findOne({ user: req.user._id, course: courseId });
