@@ -5,7 +5,7 @@ const { createCheckoutSession, handleWebhook, verifyPayment } = require('../cont
 const { protect } = require('../middlewares/authMiddleware.js');
 
 router.post('/checkout', protect, createCheckoutSession);
-router.post('/webhook',express.raw({ type: 'application/json' }), handleWebhook);
+//router.post('/webhook',express.raw({ type: 'application/json' }), handleWebhook);
 router.get('/verify', protect, verifyPayment);
 
 module.exports = router;

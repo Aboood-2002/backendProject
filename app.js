@@ -4,14 +4,17 @@ const connectToDB = require("./config/dbConnect.js")
 
 const { notFound, errorHandler } = require("./middlewares/errorMiddleware")
 
+const { handleWebhook } = require('../controllers/paymentController');
+
 const cors = require("cors")
 
 require('dotenv').config();
 
-
 connectToDB()
 
 const app = express()
+
+app.post('/webhook',express.raw({ type: 'application/json' }), handleWebhook);
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
