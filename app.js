@@ -4,7 +4,7 @@ const connectToDB = require("./config/dbConnect.js")
 
 const { notFound, errorHandler } = require("./middlewares/errorMiddleware")
 
-const { handleWebhook } = require('../controllers/paymentController');
+const { handleWebhook } = require('./controllers/paymentController');
 
 const cors = require("cors")
 
