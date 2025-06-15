@@ -17,7 +17,7 @@ const app = express()
 app.post('/webhook',express.raw({ type: 'application/json' }), handleWebhook);
 
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 
 
 app.use(cors({
