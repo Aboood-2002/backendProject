@@ -55,7 +55,7 @@ exports.getAllQuizzes = asyncHandler(async(req,res)=>{
 
   const { courseId } = req.params;
 
-  const quizzes = await Quiz.find({ course: courseId }).populate('lesson', 'title').sort({ createdAt: 1 });
+  const quizzes = await Quiz.find({ course: courseId }).populate('title').sort({ createdAt: 1 });
 
   res.status(200).json({
     message: 'Quizzes retrieved successfully',
