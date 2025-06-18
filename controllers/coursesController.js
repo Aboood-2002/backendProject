@@ -83,7 +83,7 @@ exports.getAllCourses = asyncHandler(async (req, res) => {
  */
 
 exports.getCourse = asyncHandler(async (req, res) => {
-    const course = await Course.findById(req.params.id).populate("instructor").select("-password")
+    const course = await Course.findById(req.params.id).populate("instructor",["-password"])
     if(!course){
         return res.status(404).json({
             success : false,

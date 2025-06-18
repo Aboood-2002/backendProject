@@ -54,10 +54,11 @@ exports.loginUser = asyncHandler(async (req, res) => {
     if (user && (await user.comparePassword(password))) {
       const token = user.generateAuthToken()
   
-      res.json({
+      res.status(200).json({
         _id: user._id,
         userName: user.userName,
         email: user.email,
+        role:user.role,
         token
       });
     } else {
