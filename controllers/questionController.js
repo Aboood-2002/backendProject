@@ -65,7 +65,7 @@ exports.getQuestionsByQuiz = asyncHandler(async (req, res) => {
     return res.status(403).json({ message: 'Not authorized to view questions for this quiz' });
   }
 
-  const questions = await Question.find({ quiz: quizId }).select('-correctAnswer'); // Exclude correctAnswer for students
+  const questions = await Question.find({ quiz: quizId })
   res.status(200).json({
     message: 'Questions retrieved successfully',
     questions
