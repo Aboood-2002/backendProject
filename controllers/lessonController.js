@@ -91,13 +91,17 @@ exports.getAllLessons = asyncHandler(async (req, res) => {
   if (!course) {
     return res.status(404).json({ message: 'Course not found' });
   }
+// Check if user is admin, instructor, or enrolled student
+  const isEnrolled = await Enrollment.findOne({
+    user: req.user._id,
+    course: courseId,
+    paymentStatus: 'completed',
+  });
 
-  // Check authorization: admin, course instructor, or enrolled student
   if (
     req.user.role !== 'admin' &&
     course.instructor.toString() !== req.user._id.toString() &&
-    !(await Enrollment.findOne({ user: req.user._id, course: courseId }))
-  ) {
+    !isEnrolled) {
     return res.status(403).json({ message: 'Not authorized to view lessons for this course' });
   }
 
