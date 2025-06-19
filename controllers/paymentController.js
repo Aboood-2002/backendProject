@@ -53,8 +53,8 @@ exports.createCheckoutSession = asyncHandler(async (req, res) => {
         },
       ],
       mode: 'payment',
-      success_url: `${req.protocol}://${req.get('host')}/courses`,
-      cancel_url: `${req.protocol}://${req.get('host')}/order`,
+      success_url: `${req.protocol}://${req.get('host')}/payment/success`,
+      cancel_url: `${req.protocol}://${req.get('host')}/payment/cancel`,
       customer_email : req.user.email,
       client_reference_id: req.user._id.toString(), // Store user ID
       metadata: { courseId: courseId.toString() }, // Store course ID
