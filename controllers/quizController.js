@@ -4,6 +4,8 @@ const Quiz = require("../models/Quiz.js")
 
 const Course = require("../models/Course.js")
 
+const Enrollment = require('../models/Enrollment');
+
 
 /**
  * @description  Create a new quiz
@@ -54,6 +56,20 @@ module.exports.createQuiz = asyncHandler(async(req,res)=>{
 exports.getAllQuizzes = asyncHandler(async(req,res)=>{
 
   const { courseId } = req.params;
+
+  // Check if user is admin, instructor, or enrolled student
+    const isEnrolled = await Enrollment.findOne({
+      user: req.user._id,
+      course: courseId,
+      paymentStatus: 'completed',
+    });
+  
+    if (
+      req.user.role !== 'admin' &&
+      req.user.role !== 'instructor' &&
+      !isEnrolled) {
+      return res.status(403).json({ message: 'Not authorized to view lessons for this course' });
+    }
 
   const quizzes = await Quiz.find({ course: courseId }).populate('title').sort({ createdAt: 1 });
 
