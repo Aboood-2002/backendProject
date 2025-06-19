@@ -14,7 +14,7 @@ const {videoUpload} = require("../middlewares/filesUploader")
 
 router.post("/courses/:courseId/lessons",protect,restrictToAdminInstructor,videoUpload.single("video"),validateLesson,validate,newLesson)
 
-router.get('/courses/:courseId/lessons',protect,restrictToCourseAccess,getAllLessons);
+router.get('/courses/:courseId/lessons',protect,getAllLessons);
 
 router.route("/:id")
       .get(protect,restrictToCourseAccess,getLesson)
