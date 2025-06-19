@@ -53,7 +53,7 @@ exports.createCheckoutSession = asyncHandler(async (req, res) => {
         },
       ],
       mode: 'payment',
-      success_url: `http://localhost:5173/payment/success?session_id=${session.id}`, //${req.protocol}://${req.get('host')}
+      success_url: `http://localhost:5173/payment/success?session_id={CHECKOUT_SESSION_ID}`, //${req.protocol}://${req.get('host')}
       cancel_url: `http://localhost:5173/payment/cancel`,
       customer_email : req.user.email,
       client_reference_id: req.user._id.toString(), // Store user ID
