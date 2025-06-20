@@ -1,6 +1,8 @@
 const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const Enrollment = require('../models/Enrollment');
+const Course = require('../models/Course');
 
 exports.protect = asyncHandler(async (req, res, next) => {
     const authToken = req.headers.authorization
@@ -75,22 +77,49 @@ exports.restrictToSelfOrAdmin = asyncHandler(async (req, res, next) => {
 });
 
 exports.restrictToCourseAccess = asyncHandler(async (req, res, next) => {
+  // Check if user is authenticated
   if (!req.user) {
     console.log('req.user is undefined in restrictToCourseAccess');
     res.status(401);
     throw new Error('Not authorized, no user');
   }
-  const enrollment = await require('../models/Enrollment').findById(req.params.enrollmentId);
-  if (
-    req.user.role.toLowerCase() === 'admin' ||
-    (enrollment && enrollment.user.toString() === req.user._id.toString()) ||
-    (enrollment && enrollment.course.instructor.toString() === req.user._id.toString())
-  ) {
-    next();
-  } else {
-    console.log(`User ${req.user._id} not authorized for enrollment: ${req.params.enrollmentId}`);
-    res.status(403);
-    throw new Error('Not authorized to access this enrollment');
+
+  const { courseId } = req.params;
+
+  // Validate courseId
+  if (!courseId) {
+    res.status(400);
+    throw new Error('Course ID is required');
+  }
+
+  // Allow admins to bypass
+  if (req.user.role.toLowerCase() === 'admin') {
+    return next();
+  }
+
+  try {
+    // Check if user is enrolled in the course
+    const enrollment = await Enrollment.findOne({
+      course: courseId,
+      user: req.user._id,
+      paymentStatus: 'completed',
+    });
+
+    // Check if user is the course instructor
+    const course = await Course.findById(courseId).select('instructor');
+    const isInstructor = course && course.instructor.toString() === req.user._id.toString();
+
+    if (enrollment || isInstructor) {
+      next();
+    } else {
+      console.log(`User ${req.user._id} not authorized for course: ${courseId}`);
+      res.status(403);
+      throw new Error('Not authorized to access this course');
+    }
+  } catch (error) {
+    console.error(`Error in restrictToCourseAccess for user ${req.user._id}, course ${courseId}:`, error);
+    res.status(500);
+    throw new Error('Server error while checking course access');
   }
 });
 
