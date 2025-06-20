@@ -167,3 +167,35 @@ exports.verifyPayment = asyncHandler(async (req, res) => {
     return res.status(500).json({ message: 'Failed to verify payment', error: error.message });
   }
 });
+
+
+
+// @desc    check Enrollment of a course for a user
+// @route   GET /api/payments/check/:courseId
+// @access  Private (student)
+
+exports.checkEnrollment = asyncHandler(async (req, res) => {
+  const { courseId } = req.params;
+  const userId = req.user._id;
+
+  if (!courseId) {
+    return res.status(400).json({ message: 'Course ID is required' });
+  }
+
+  // Validate course existence
+  const course = await Course.findById(courseId);
+  if (!course) {
+    return res.status(404).json({ message: 'Course not found' });
+  }
+
+  // Check enrollment
+  const enrollment = await Enrollment.findOne({
+    course: courseId,
+    user: userId,
+    paymentStatus: 'completed',
+  });
+
+  res.status(200).json({
+    success: !!enrollment, // true if enrolled, false otherwise
+  });
+});
