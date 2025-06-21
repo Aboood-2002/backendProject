@@ -178,3 +178,19 @@ exports.deleteCourse = asyncHandler(async(req,res)=>{
         res.status(403).json({message : "access denied , forbidden"})
     }
 })
+
+
+
+
+/**
+ * @description  Get Count courses
+ * @route  /api/courses/count
+ * @method  GET
+ * @access private (only admin)
+ */
+
+
+exports.getCountCoursesCtrl = asyncHandler(async(req,res)=>{
+    const count = await Course.countDocuments()
+    res.status(200).json(count)
+})

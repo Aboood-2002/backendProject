@@ -122,6 +122,25 @@ exports.profilePhotoUpload = asyncHandler(async(req,res)=>{
 
 
 
+
+
+/**
+ * @description  Get Count Users
+ * @route  /api/users/count
+ * @method  GET
+ * @access private (only admin)
+ */
+
+
+exports.getCountUsersCtrl = asyncHandler(async(req,res)=>{
+    const count = await User.countDocuments()
+    res.status(200).json(count)
+})
+
+
+
+
+
 /**
  * @description  Delete user account
  * @route  /api/users/profile/:id

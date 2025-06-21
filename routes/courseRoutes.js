@@ -4,7 +4,7 @@ const router = express.Router();
 
 const {restrictToAdminInstructor,protect} = require("../middlewares/authMiddleware");
 
-const { createCourse , getAllCourses,getCourse,updateCourse,deleteCourse } = require("../controllers/coursesController");
+const { createCourse , getAllCourses,getCourse,updateCourse,deleteCourse,getCountCoursesCtrl } = require("../controllers/coursesController");
 
 const {photoUpload} = require("../middlewares/filesUploader")
 
@@ -21,6 +21,9 @@ router.route("/:id")
       .get(getCourse)
       .put(protect,restrictToAdminInstructor,updateCourse)
       .delete(protect,restrictToAdminInstructor,deleteCourse)
+
+router.route("/count").get(restrictToAdminInstructor,getCountCoursesCtrl)
+
 
 
 module.exports = router

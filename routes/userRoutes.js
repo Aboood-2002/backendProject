@@ -1,6 +1,6 @@
 const router = require("express").Router()
 
-const { getAllUsers, getUser, updateUser, profilePhotoUpload } = require("../controllers/usersController.js")
+const { getAllUsers, getUser, updateUser, profilePhotoUpload,getCountUsersCtrl } = require("../controllers/usersController.js")
 const {protect,restrictToAdminInstructor,restrictToSelf} = require("../middlewares/authMiddleware.js")
 const validateObjectId = require("../middlewares/validateObjectId")
 const {photoUpload} = require("../middlewares/filesUploader.js")
@@ -18,6 +18,9 @@ router.route("/profile/:id")
 
 router.route("/profile/profile-photo-upload")
       .post(protect,photoUpload.single("image"),profilePhotoUpload)
+
+
+router.route("/count").get(restrictToAdminInstructor,getCountUsersCtrl)
 
 
 
