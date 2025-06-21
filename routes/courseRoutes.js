@@ -22,7 +22,7 @@ router.route("/:id")
       .put(protect,restrictToAdminInstructor,updateCourse)
       .delete(protect,restrictToAdminInstructor,deleteCourse)
 
-router.route("/count").get(restrictToAdminInstructor,getCountCoursesCtrl)
+router.route("/count").get(protect,restrictToAdminInstructor,getCountCoursesCtrl)
 
 
 

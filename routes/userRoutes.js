@@ -20,7 +20,7 @@ router.route("/profile/profile-photo-upload")
       .post(protect,photoUpload.single("image"),profilePhotoUpload)
 
 
-router.route("/count").get(restrictToAdminInstructor,getCountUsersCtrl)
+router.route("/count").get(protect,restrictToAdminInstructor,getCountUsersCtrl)
 
 
 
