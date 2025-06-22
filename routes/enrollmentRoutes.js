@@ -1,13 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const {
-  createEnrollment,
   getUserEnrollments,
   getCourseEnrollments,
   getEnrollmentById,
-  updateEnrollment,
-  deleteEnrollment,
-  submitQuizScore
 } = require('../controllers/enrollmentController.js');
 const {
   protect,
@@ -16,41 +12,41 @@ const {
   restrictToSelf,
   restrictToSelfOrAdmin
 } = require('../middlewares/authMiddleware.js');
-const {
-  validateProgressUpdate,
-  validateQuizScore,
-} = require('../utils/validators/enrollmentValidator.js');
+// const {
+//   validateProgressUpdate,
+//   validateQuizScore,
+// } = require('../utils/validators/enrollmentValidator.js');
 
 const { validate } = require("../middlewares/validationMiddleware");
 
 
-router.post(
-  '/courses/:courseId',
-  restrictToSelf,
-  createEnrollment
-);
+// router.post(
+//   '/courses/:courseId',
+//   restrictToSelf,
+//   createEnrollment
+// );
 
 router.get('/user', getUserEnrollments);
-router.get('/courses/:courseId', restrictToAdminInstructor, getCourseEnrollments);
+router.get('/courses/:courseId',protect, restrictToAdminInstructor, getCourseEnrollments);
 
 
 router.route("/:enrollmentId")
-     .get('/:enrollmentId', restrictToCourseAccess, getEnrollmentById)
-     .put(
-        restrictToAdminInstructor,
-         validateProgressUpdate,
-         validate,
-         updateEnrollment
-        )
-     .delete(restrictToSelfOrAdmin, deleteEnrollment);
+     .get('/:enrollmentId', protect,restrictToCourseAccess, getEnrollmentById)
+    //  .put(
+    //     restrictToAdminInstructor,
+    //      validateProgressUpdate,
+    //      validate,
+    //      updateEnrollment
+    //     )
+     .delete(protect,restrictToSelfOrAdmin, deleteEnrollment);
 
 
-router.post(
-  '/:enrollmentId/quiz-scores',
-  restrictToSelf,
-  validateQuizScore,
-  validate,
-  submitQuizScore
-);
+// router.post(
+//   '/:enrollmentId/quiz-scores',
+//   restrictToSelf,
+//   validateQuizScore,
+//   validate,
+//   submitQuizScore
+// );
 
 module.exports = router

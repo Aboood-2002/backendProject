@@ -11,36 +11,36 @@ const Quiz = require('../models/Quiz');
  * @access  Private (student)
  */
 
-exports.createEnrollment = asyncHandler(async (req, res) => {
-  const { courseId } = req.params;
-  const userId = req.user._id;
+// exports.createEnrollment = asyncHandler(async (req, res) => {
+//   const { courseId } = req.params;
+//   const userId = req.user._id;
 
-  // Validate course existence
-  const course = await Course.findById(courseId);
-  if (!course) {
-    return res.status(404).json({ message: 'Course not found' });
-  }
+//   // Validate course existence
+//   const course = await Course.findById(courseId);
+//   if (!course) {
+//     return res.status(404).json({ message: 'Course not found' });
+//   }
 
-  // Check if already enrolled
-  const existingEnrollment = await Enrollment.findOne({ user: userId, course: courseId });
-  if (existingEnrollment) {
-    return res.status(400).json({ message: 'User is already enrolled in this course' });
-  }
+//   // Check if already enrolled
+//   const existingEnrollment = await Enrollment.findOne({ user: userId, course: courseId });
+//   if (existingEnrollment) {
+//     return res.status(400).json({ message: 'User is already enrolled in this course' });
+//   }
 
-  // Create enrollment
-  const enrollment = await Enrollment.create({
-    user: userId,
-    course: courseId
-  });
+//   // Create enrollment
+//   const enrollment = await Enrollment.create({
+//     user: userId,
+//     course: courseId
+//   });
 
-  // Update course's enrolledStudents
-  await Course.findByIdAndUpdate(courseId, { $addToSet: { enrolledStudents: userId } });
+//   // Update course's enrolledStudents
+//   await Course.findByIdAndUpdate(courseId, { $addToSet: { enrolledStudents: userId } });
 
-  res.status(201).json({
-    message: 'Enrolled successfully',
-    enrollment
-  });
-});
+//   res.status(201).json({
+//     message: 'Enrolled successfully',
+//     enrollment
+//   });
+// });
 
 
 /**
@@ -130,35 +130,35 @@ exports.getEnrollmentById = asyncHandler(async (req, res) => {
 // @desc    Update enrollment (progress, completion)
 // @route   PUT /api/enrollments/:enrollmentId
 // @access  Private (instructor, admin)
-exports.updateEnrollment = asyncHandler(async (req, res) => {
-  const { enrollmentId } = req.params;
-  const { progress, completed } = req.body;
+// exports.updateEnrollment = asyncHandler(async (req, res) => {
+//   const { enrollmentId } = req.params;
+//   const { progress, completed } = req.body;
 
-  // Find enrollment and populate course
-  const enrollment = await Enrollment.findById(enrollmentId).populate('course');
-  if (!enrollment) {
-    return res.status(404).json({ message: 'Enrollment not found' });
-  }
+//   // Find enrollment and populate course
+//   const enrollment = await Enrollment.findById(enrollmentId).populate('course');
+//   if (!enrollment) {
+//     return res.status(404).json({ message: 'Enrollment not found' });
+//   }
 
-  // Check authorization: admin or course instructor
-  if (
-    req.user.role !== 'admin' &&
-    enrollment.course.instructor.toString() !== req.user._id.toString()
-  ) {
-    return res.status(403).json({ message: 'Not authorized to update this enrollment' });
-  }
+//   // Check authorization: admin or course instructor
+//   if (
+//     req.user.role !== 'admin' &&
+//     enrollment.course.instructor.toString() !== req.user._id.toString()
+//   ) {
+//     return res.status(403).json({ message: 'Not authorized to update this enrollment' });
+//   }
 
-  // Update fields if provided
-  if (progress !== undefined) enrollment.progress = progress;
-  if (completed !== undefined) enrollment.completed = completed;
+//   // Update fields if provided
+//   if (progress !== undefined) enrollment.progress = progress;
+//   if (completed !== undefined) enrollment.completed = completed;
 
-  await enrollment.save();
+//   await enrollment.save();
 
-  res.status(200).json({
-    message: 'Enrollment updated successfully',
-    enrollment
-  });
-});
+//   res.status(200).json({
+//     message: 'Enrollment updated successfully',
+//     enrollment
+//   });
+// });
 
 // @desc    Delete enrollment
 // @route   DELETE /api/enrollments/:enrollmentId
@@ -190,49 +190,49 @@ exports.deleteEnrollment = asyncHandler(async (req, res) => {
 // @desc    Submit quiz score
 // @route   POST /api/enrollments/:enrollmentId/quizzes/:quizId/score
 // @access  Private (student)
-exports.submitQuizScore = asyncHandler(async (req, res) => {
-  const { enrollmentId, quizId } = req.params;
-  const { score } = req.body;
+// exports.submitQuizScore = asyncHandler(async (req, res) => {
+//   const { enrollmentId, quizId } = req.params;
+//   const { score } = req.body;
 
-  // Find enrollment and populate course
-  const enrollment = await Enrollment.findById(enrollmentId).populate('course');
-  if (!enrollment) {
-    return res.status(404).json({ message: 'Enrollment not found' });
-  }
+//   // Find enrollment and populate course
+//   const enrollment = await Enrollment.findById(enrollmentId).populate('course');
+//   if (!enrollment) {
+//     return res.status(404).json({ message: 'Enrollment not found' });
+//   }
 
-  // Check authorization: enrolled user
-  if (enrollment.user.toString() !== req.user._id.toString()) {
-    return res.status(403).json({ message: 'Not authorized to submit score for this enrollment' });
-  }
+//   // Check authorization: enrolled user
+//   if (enrollment.user.toString() !== req.user._id.toString()) {
+//     return res.status(403).json({ message: 'Not authorized to submit score for this enrollment' });
+//   }
 
-  // Validate quiz existence and ensure it belongs to the course
-  const quiz = await Quiz.findById(quizId);
-  if (!quiz) {
-    return res.status(404).json({ message: 'Quiz not found' });
-  }
-  if (quiz.course.toString() !== enrollment.course._id.toString()) {
-    return res.status(400).json({ message: 'Quiz does not belong to this course' });
-  }
+//   // Validate quiz existence and ensure it belongs to the course
+//   const quiz = await Quiz.findById(quizId);
+//   if (!quiz) {
+//     return res.status(404).json({ message: 'Quiz not found' });
+//   }
+//   if (quiz.course.toString() !== enrollment.course._id.toString()) {
+//     return res.status(400).json({ message: 'Quiz does not belong to this course' });
+//   }
 
-  // Check if quiz score already exists
-  const existingScore = enrollment.quizScores.find(
-    (qs) => qs.quiz.toString() === quizId
-  );
-  if (existingScore) {
-    return res.status(400).json({ message: 'Quiz score already submitted' });
-  }
+//   // Check if quiz score already exists
+//   const existingScore = enrollment.quizScores.find(
+//     (qs) => qs.quiz.toString() === quizId
+//   );
+//   if (existingScore) {
+//     return res.status(400).json({ message: 'Quiz score already submitted' });
+//   }
 
-  // Add quiz score
-  enrollment.quizScores.push({
-    quiz: quizId,
-    score,
-    completedAt: new Date()
-  });
+//   // Add quiz score
+//   enrollment.quizScores.push({
+//     quiz: quizId,
+//     score,
+//     completedAt: new Date()
+//   });
 
-  await enrollment.save();
+//   await enrollment.save();
 
-  res.status(200).json({
-    message: 'Quiz score submitted successfully',
-    enrollment
-  });
-});
+//   res.status(200).json({
+//     message: 'Quiz score submitted successfully',
+//     enrollment
+//   });
+// });
