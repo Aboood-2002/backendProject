@@ -52,7 +52,7 @@ const Quiz = require('../models/Quiz');
 
 exports.getUserEnrollments = asyncHandler(async (req, res) => {
   const enrollments = await Enrollment.find({ user: req.user._id })
-    .populate('course', 'title description')
+    .populate('course')
     .populate({
       path: 'quizScores.quiz',
       select: 'title'
