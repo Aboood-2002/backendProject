@@ -31,7 +31,7 @@ router.get('/courses/:courseId',protect, restrictToAdminInstructor, getCourseEnr
 
 
 router.route("/:enrollmentId")
-     .get('/:enrollmentId', protect,restrictToCourseAccess, getEnrollmentById)
+     .get(protect,restrictToCourseAccess, getEnrollmentById)
     //  .put(
     //     restrictToAdminInstructor,
     //      validateProgressUpdate,
