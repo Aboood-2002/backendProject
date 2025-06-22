@@ -27,7 +27,7 @@ const { validate } = require("../middlewares/validationMiddleware");
 //   createEnrollment
 // );
 
-router.get('/user', getUserEnrollments);
+router.get('/user',protect,getUserEnrollments);
 router.get('/courses/:courseId',protect, restrictToAdminInstructor, getCourseEnrollments);
 
 
