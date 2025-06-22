@@ -17,12 +17,13 @@ router.post("/",protect,restrictToAdminInstructor,photoUpload.single("image"),cr
 
 router.route("/").get(getAllCourses)
 
+router.route("/count").get(protect,restrictToAdminInstructor,getCountCoursesCtrl)
+
 router.route("/:id")
       .get(getCourse)
       .put(protect,restrictToAdminInstructor,updateCourse)
       .delete(protect,restrictToAdminInstructor,deleteCourse)
 
-router.route("/count").get(protect,restrictToAdminInstructor,getCountCoursesCtrl)
 
 
 
