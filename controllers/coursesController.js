@@ -66,7 +66,7 @@ exports.createCourse = asyncHandler(async (req, res) => {
 
 exports.getAllCourses = asyncHandler(async (req, res) => {
 
-    const courses = await Course.find().populate("instructor")
+    const courses = await Course.find().populate("instructor",["-password"])
     res.status(200).json({
         success : true,
         courses
