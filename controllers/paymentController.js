@@ -68,8 +68,9 @@ exports.createCheckoutSession = asyncHandler(async (req, res) => {
       stripePaymentId: session.id,
     });
 
-    // 7. Update course's enrolledStudents
+    // 7. Update course's enrolledStudents && User's enrolledCourses
     await Course.findByIdAndUpdate(courseId, { $addToSet: { enrolledStudents: req.user._id } });
+    await User.findByIdAndUpdate(req.user._id, { $addToSet: { enrolledCourses: courseId } });
     
 
     res.status(200).json({
