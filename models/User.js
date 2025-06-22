@@ -46,18 +46,8 @@ const userSchema = new mongoose.Schema({
   }],
 },{
     timestamps: true,
-    toJSON : {virtuals : true},
-    toObject : {virtuals : true}
 });
 
-
-// Populate Posts That Belongs To This User when he/she Get his/her Profile
-
-userSchema.virtual("courses",{
-    ref : "Course",
-    foreignField:"user",
-    localField:"_id"
-})
 
 // Hash password before saving
 userSchema.pre('save', async function(next) {
