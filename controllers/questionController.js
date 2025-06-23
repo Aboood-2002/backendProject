@@ -57,13 +57,13 @@ exports.getQuestionsByQuiz = asyncHandler(async (req, res) => {
   }
 
   // Check authorization: admin, instructor of the course, or enrolled student
-  if (
-    req.user.role !== 'admin' &&
-    quiz.course.instructor.toString() !== req.user._id.toString() &&
-    !(await Course.findOne({ _id: quiz.course._id, enrolledStudents: req.user._id }))
-  ) {
-    return res.status(403).json({ message: 'Not authorized to view questions for this quiz' });
-  }
+  // if (
+  //   req.user.role !== 'admin' &&
+  //   quiz.course.instructor.toString() !== req.user._id.toString() &&
+  //   !(await Course.findOne({ _id: quiz.course._id, enrolledStudents: req.user._id }))
+  // ) {
+  //   return res.status(403).json({ message: 'Not authorized to view questions for this quiz' });
+  // }
 
   const questions = await Question.find({ quiz: quizId })
   res.status(200).json({
