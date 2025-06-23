@@ -15,7 +15,11 @@ exports.sendResetCode = async (req, res) => {
   user.resetCodeExpires = expiry;
   await user.save();
 
-  await sendEmail(email, 'Your Reset Code', `Your reset code is: ${code}`);
+  await sendEmail(email, 'Your Reset Code', `<div>
+        <h2>
+        Your password reset code is: ${code}
+        </h2>
+        </div>`);
 
   res.status(200).json({ message: 'Code sent to email' });
 };
