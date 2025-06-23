@@ -42,8 +42,8 @@ exports.resetPassword = async (req, res) => {
 
   if (!user) return res.status(404).json({ message: 'User not found' });
 
-  //const hashedPassword = await bcrypt.hash(password, 10);
-  user.password = password;
+
+  user.password = password; // Hash the new password in the User model's pre-save hook
   user.resetCode = null;
   user.resetCodeExpires = null;
   await user.save();
