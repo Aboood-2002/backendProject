@@ -19,6 +19,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  resetCode: { type: String },
+  resetCodeExpires: { type: Date },
   profilePhoto : {
     type : Object,
     default :{

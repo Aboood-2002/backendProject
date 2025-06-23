@@ -44,6 +44,9 @@ app.use("/api/enrollments/",require("./routes/enrollmentRoutes.js"))
 
 app.use('/api/payments', require("./routes/paymentRoutes.js"));
 
+app.use('/api/password', require('./routes/passwordRoutes.js'));
+
+
 
 // Error handler middleware
 
