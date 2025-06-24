@@ -190,49 +190,49 @@ exports.deleteEnrollment = asyncHandler(async (req, res) => {
 // @desc    Submit quiz score
 // @route   POST /api/enrollments/:enrollmentId/quizzes/:quizId/score
 // @access  Private (student)
-// exports.submitQuizScore = asyncHandler(async (req, res) => {
-//   const { enrollmentId, quizId } = req.params;
-//   const { score } = req.body;
+exports.submitQuizScore = asyncHandler(async (req, res) => {
+  const { enrollmentId, quizId } = req.params;
+  const { score } = req.body;
 
-//   // Find enrollment and populate course
-//   const enrollment = await Enrollment.findById(enrollmentId).populate('course');
-//   if (!enrollment) {
-//     return res.status(404).json({ message: 'Enrollment not found' });
-//   }
+  // Find enrollment and populate course
+  const enrollment = await Enrollment.findById(enrollmentId).populate('course');
+  if (!enrollment) {
+    return res.status(404).json({ message: 'Enrollment not found' });
+  }
 
-//   // Check authorization: enrolled user
-//   if (enrollment.user.toString() !== req.user._id.toString()) {
-//     return res.status(403).json({ message: 'Not authorized to submit score for this enrollment' });
-//   }
+  // Check authorization: enrolled user
+  if (enrollment.user.toString() !== req.user._id.toString()) {
+    return res.status(403).json({ message: 'Not authorized to submit score for this enrollment' });
+  }
 
-//   // Validate quiz existence and ensure it belongs to the course
-//   const quiz = await Quiz.findById(quizId);
-//   if (!quiz) {
-//     return res.status(404).json({ message: 'Quiz not found' });
-//   }
-//   if (quiz.course.toString() !== enrollment.course._id.toString()) {
-//     return res.status(400).json({ message: 'Quiz does not belong to this course' });
-//   }
+  // Validate quiz existence and ensure it belongs to the course
+  const quiz = await Quiz.findById(quizId);
+  if (!quiz) {
+    return res.status(404).json({ message: 'Quiz not found' });
+  }
+  if (quiz.course.toString() !== enrollment.course._id.toString()) {
+    return res.status(400).json({ message: 'Quiz does not belong to this course' });
+  }
 
-//   // Check if quiz score already exists
-//   const existingScore = enrollment.quizScores.find(
-//     (qs) => qs.quiz.toString() === quizId
-//   );
-//   if (existingScore) {
-//     return res.status(400).json({ message: 'Quiz score already submitted' });
-//   }
+  // Check if quiz score already exists
+  const existingScore = enrollment.quizScores.find(
+    (qs) => qs.quiz.toString() === quizId
+  );
+  if (existingScore) {
+    return res.status(400).json({ message: 'Quiz score already submitted' });
+  }
 
-//   // Add quiz score
-//   enrollment.quizScores.push({
-//     quiz: quizId,
-//     score,
-//     completedAt: new Date()
-//   });
+  // Add quiz score
+  enrollment.quizScores.push({
+    quiz: quizId,
+    score,
+    completedAt: new Date()
+  });
 
-//   await enrollment.save();
+  await enrollment.save();
 
-//   res.status(200).json({
-//     message: 'Quiz score submitted successfully',
-//     enrollment
-//   });
-// });
+  res.status(200).json({
+    message: 'Quiz score submitted successfully',
+    enrollment
+  });
+});

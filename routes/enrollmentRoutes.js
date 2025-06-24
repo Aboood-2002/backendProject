@@ -42,12 +42,11 @@ router.route("/:enrollmentId")
      .delete(protect,restrictToSelfOrAdmin, deleteEnrollment);
 
 
-// router.post(
-//   '/:enrollmentId/quiz-scores',
-//   restrictToSelf,
-//   validateQuizScore,
-//   validate,
-//   submitQuizScore
-// );
+router.post(
+  '/:enrollmentId/quizzes/:quizId/quiz-score',
+  protect,
+  restrictToSelf,
+  submitQuizScore
+);
 
 module.exports = router
