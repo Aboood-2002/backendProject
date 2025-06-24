@@ -20,7 +20,7 @@ router.post(
   validate,
   createQuestion
 )
-router.get('/quizzes/:quizId/questions', protect, restrictToCourseAccess, getQuestionsByQuiz)
+router.get('/course/:courseId/quizzes/:quizId/questions', protect, restrictToCourseAccess, getQuestionsByQuiz)
 router.route("/:id")
       .get(protect,restrictToCourseAccess, getQuestionById)
       .put(protect,restrictToAdminInstructor,validateQuestion,validate,updateQuestion)
