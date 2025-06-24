@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const Enrollment = require('../models/Enrollment');
 const Course = require('../models/Course');
 const Quiz = require('../models/Quiz');
+const User = require('../models/User')
 
 
 /**
@@ -214,6 +215,10 @@ exports.submitQuizScore = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: 'Quiz does not belong to this course' });
   }
 
+  const user = await User.findById(req.user._id)
+    if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
   // Check if quiz score already exists
   const existingScore = enrollment.quizScores.find(
     (qs) => qs.quiz.toString() === quizId
@@ -230,6 +235,15 @@ exports.submitQuizScore = asyncHandler(async (req, res) => {
   });
 
   await enrollment.save();
+
+
+ user.quizScores.push({
+    quiz: quizId,
+    score,
+    completedAt: new Date()
+  });
+
+  await user.save();
 
   res.status(200).json({
     message: 'Quiz score submitted successfully',
