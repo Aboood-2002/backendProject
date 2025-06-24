@@ -4,7 +4,8 @@ const {
   getUserEnrollments,
   getCourseEnrollments,
   getEnrollmentById,
-  deleteEnrollment
+  deleteEnrollment,
+  submitQuizScore
 } = require('../controllers/enrollmentController.js');
 const {
   protect,
