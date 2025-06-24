@@ -46,7 +46,7 @@ router.route("/:enrollmentId")
 router.post(
   '/:enrollmentId/quizzes/:quizId/quiz-score',
   protect,
-  restrictToSelf,
+  restrictToCourseAccess,
   submitQuizScore
 );
 
