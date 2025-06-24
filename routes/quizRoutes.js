@@ -21,7 +21,7 @@ router.post('/courses/:courseId/quiz',
      createQuiz
     );
 router.get('/courses/:courseId/quizzes', protect,restrictToCourseAccess, getAllQuizzes)
-router.get('/courses/:courseId/quizzes',protect,restrictToCourseAccess, getQuiz)
+router.get('/courses/:courseId/quizzes/:id', protect, restrictToCourseAccess, getQuiz);
 router.route("/:id")
       .put(protect,restrictToAdminInstructor,validateQuiz, validate, updateQuiz)
       .delete(protect,restrictToAdminInstructor, deleteQuiz)
