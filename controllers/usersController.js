@@ -3,6 +3,7 @@ const User = require("../models/User.js");
 const {cloudinaryUploadFile , cloudinaryRemoveFile} = require("../utils/cloudinary.js")
 const path = require("path");
 const fs = require("fs");
+const Enrollment = require('../models/Enrollment');
 
 /**
  * @description  Get All Users
@@ -138,6 +139,35 @@ exports.getCountUsersCtrl = asyncHandler(async(req,res)=>{
 })
 
 
+
+
+
+
+
+exports.getStudentPerformance = asyncHandler(async (req, res) => {
+  const enrollments = await Enrollment.find({ user: req.user._id })
+    .populate('course', 'title')
+    .populate('quizScores.quiz', 'title duration questions')
+    .lean();
+
+  const data = enrollments.flatMap(enrollment =>
+    enrollment.quizScores.map(score => {
+      const totalQuestions = score.quiz?.questions?.length || 0;
+      const percentageScore = totalQuestions > 0 ? (score.score / totalQuestions) * 100 : 0;
+      return {
+        courseTitle: enrollment.course?.title,
+        quizTitle: score.quiz?.title,
+        score: score.score,
+        timeUsed: score.timeUsed,
+        completedAt: score.completedAt,
+        percentageScore: percentageScore.toFixed(2),
+        passFail: percentageScore >= 60 ? 'Pass' : 'Fail'
+      };
+    })
+  );
+
+  res.json(data);
+});
 
 
 
