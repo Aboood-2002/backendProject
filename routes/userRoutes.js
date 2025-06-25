@@ -24,7 +24,7 @@ router.route("/profile/profile-photo-upload")
 router.route("/count").get(protect,restrictToAdminInstructor,getCountUsersCtrl)
 
 
-router.("/profile/dashboard/performance", protect, getStudentPerformance)
+router.get("/profile/dashboard/performance", protect, getStudentPerformance)
 
 
 
