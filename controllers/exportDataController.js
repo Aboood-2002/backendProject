@@ -23,7 +23,7 @@ exports.exportStudentPerformance = asyncHandler(async (req, res) => {
       const percentageScore = totalQuestions > 0 ? (score.score / totalQuestions) * 100 : 0;
       return {
         studentId: enrollment.user?._id || 'Unknown',
-        studentName: enrollment.user?.name || 'Unknown',
+        studentName: enrollment.user?.userName || 'Unknown',
         studentEmail: enrollment.user?.email || 'Unknown',
         courseId: enrollment.course?._id || 'Unknown',
         courseTitle: enrollment.course?.title || 'Unknown',
