@@ -22,10 +22,10 @@ exports.exportStudentPerformance = async (req, res) => {
         courseId: enrollment.course._id,
         courseTitle: enrollment.course.title,
         quizId: quizzes._id,
-        quizTitle: quizzes.find(q => q._id.toString() === quizzes._id.toString())?.title || 'Unknown',
+        quizTitle: quizzes.find(q => q._id.toString() === quizzes.quizId.toString())?.title || 'Unknown',
         score: quizzes.quizScores.score,
-        totalQuestions: quizzes.find(q => q._id.toString() === quizzes._id.toString())?.questions?.length || 0,
-        duration: quizzes.find(q => q._id.toString() === quizzes._id.toString())?.duration || 5,
+        totalQuestions: quizzes.find(q => q._id.toString() === quizzes.quizId.toString())?.questions?.length || 0,
+        duration: quizzes.find(q => q._id.toString() === quizzes.quizId.toString())?.duration || 5,
         timeUsed: quizzes.quizScores.timeUsed || 0, // Add timeUsed to quizScores in backend
         submittedAt: quizzes.quizScores.completedAt,
       }))
