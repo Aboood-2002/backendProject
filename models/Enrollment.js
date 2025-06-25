@@ -31,6 +31,10 @@ const enrollmentSchema = new mongoose.Schema({
         min: 0,
         max: 100
       },
+      timeUsed: {
+        type: Number, // Time used in seconds
+        default: 0
+      },
       completedAt: Date
     }],
     completed: {

@@ -193,7 +193,7 @@ exports.deleteEnrollment = asyncHandler(async (req, res) => {
 // @access  Private (student)
 exports.submitQuizScore = asyncHandler(async (req, res) => {
   const { enrollmentId, quizId } = req.params;
-  const { score } = req.body;
+  const { score,timeUsed } = req.body;
 
   // Find enrollment and populate course
   const enrollment = await Enrollment.findById(enrollmentId).populate('course');
@@ -231,6 +231,7 @@ exports.submitQuizScore = asyncHandler(async (req, res) => {
   enrollment.quizScores.push({
     quiz: quizId,
     score,
+    timeUsed,
     completedAt: new Date()
   });
 
@@ -240,6 +241,7 @@ exports.submitQuizScore = asyncHandler(async (req, res) => {
  user.quizScores.push({
     quiz: quizId,
     score,
+    timeUsed,
     completedAt: new Date()
   });
 

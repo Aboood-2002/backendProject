@@ -43,8 +43,9 @@ const userSchema = new mongoose.Schema({
       ref: 'Quiz'
     },
     score: Number,
+    timeUsed: Number, // Time used in seconds
     maxScore: Number,
-    attemptedAt: Date
+    completedAt: Date
   }],
 },{
     timestamps: true,
