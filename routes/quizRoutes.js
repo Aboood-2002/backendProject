@@ -9,6 +9,9 @@ const {
   updateQuiz,
   deleteQuiz
 } = require('../controllers/quizController.js');
+
+const {exportStudentPerformance} = require('../controllers/exportDataController.js');
+
 const { protect,restrictToAdminInstructor, restrictToCourseAccess } = require('../middlewares/authMiddleware');
 const  {validateQuiz} = require('../utils/validators/quizValidator');
 const { validate } = require("../middlewares/validationMiddleware");
@@ -25,5 +28,7 @@ router.get('/courses/:courseId/quizzes/:quizId', protect, restrictToCourseAccess
 router.route("/:id")
       .put(protect,restrictToAdminInstructor,validateQuiz, validate, updateQuiz)
       .delete(protect,restrictToAdminInstructor, deleteQuiz)
+
+router.get('/export/performance', exportStudentPerformance);
 
 module.exports = router
