@@ -8,7 +8,7 @@ const Quiz = require('../models/Quiz');
 exports.exportStudentPerformance = asyncHandler(async (req, res) => {
   // Fetch all enrollments with populated user and course
   const enrollments = await Enrollment.find()
-    .populate('user', 'name email')
+    .populate('user', 'userName email')
     .populate('course', 'title')
     .lean();
 
