@@ -25,12 +25,7 @@ exports.registerUser = asyncHandler(async (req, res) => {
     
       if (user) {
     
-        res.status(201).json({
-          _id: user._id,
-          userName: user.userName,
-          email: user.email,
-          role: user.role,
-        });
+        res.status(201).json({message : "you registred successfully, please log in"});
       } else {
         res.status(400);
         throw new Error('Invalid user data');
