@@ -22,9 +22,16 @@ const quizSchema = new mongoose.Schema({
       max: 100
     },
   },{
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
   });
 
+quizSchema.virtual('questions', {
+    ref: 'Question',
+    localField: '_id',
+    foreignField: 'quiz',}
+  );
 
   const Quiz = mongoose.model('Quiz', quizSchema);
 
