@@ -28,7 +28,7 @@ const quizSchema = new mongoose.Schema({
   });
 
 quizSchema.virtual('questions', {
-    ref: 'Questions',
+    ref: 'Question',
     localField: '_id',
     foreignField: 'quiz',}
   );
