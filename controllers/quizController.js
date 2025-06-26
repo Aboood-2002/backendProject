@@ -91,20 +91,20 @@ exports.getAllQuizzes = asyncHandler(async(req,res)=>{
 
 
 exports.getQuiz = asyncHandler(async (req, res) => {
-
-    const { quizId } = req.params;
-    const quiz = await Quiz.findById(quizId).populate('course', 'title')
-                                            .populate('questions', 'questionText options correctAnswer');
-     if (!quiz) {
-      return res.status(404).json({ message: 'Quiz not found' });
-     }
+  const { quizId } = req.params;
+  const quiz = await Quiz.findById(quizId)
+    .populate('course', 'title')
+    .populate('questions', 'name options correctAnswer'); // Changed questionText to name
+  if (!quiz) {
+    return res.status(404).json({ message: 'Quiz not found' });
+  }
 
   // Authorization done in restrictToCourseAccess middleware
-    res.status(200).json({
+  res.status(200).json({
     message: 'Quiz retrieved successfully',
     quiz
   });
-})
+});
 
 
 
