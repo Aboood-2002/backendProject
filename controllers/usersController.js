@@ -145,23 +145,33 @@ exports.getCountUsersCtrl = asyncHandler(async(req,res)=>{
 
 
 exports.getStudentPerformance = asyncHandler(async (req, res) => {
+  // Fetch enrollments with populated course and quiz (including virtual questions)
   const enrollments = await Enrollment.find({ user: req.user._id })
     .populate('course', 'title')
-    .populate('quizScores.quiz', 'title duration questions')
+    .populate({
+      path: 'quizScores.quiz',
+      select: 'title duration',
+      populate: {
+        path: 'questions',
+        select: 'name' // Minimal selection to count questions
+      }
+    })
     .lean();
 
+  // Transform data for dashboard
   const data = enrollments.flatMap(enrollment =>
     enrollment.quizScores.map(score => {
       const totalQuestions = score.quiz?.questions?.length || 0;
       const percentageScore = totalQuestions > 0 ? (score.score / totalQuestions) * 100 : 0;
       return {
-        courseTitle: enrollment.course?.title,
-        quizTitle: score.quiz?.title,
-        score: score.score,
-        timeUsed: score.timeUsed,
-        completedAt: score.completedAt,
+        courseTitle: enrollment.course?.title || 'Unknown',
+        quizTitle: score.quiz?.title || 'Unknown',
+        score: score.score || 0,
+        timeUsed: score.timeUsed || 0,
+        completedAt: score.completedAt ? new Date(score.completedAt).toISOString() : '',
         percentageScore: percentageScore.toFixed(2),
-        passFail: percentageScore >= 60 ? 'Pass' : 'Fail'
+        passFail: percentageScore >= 60 ? 'Pass' : 'Fail',
+        totalQuestions // Include for dashboard
       };
     })
   );
