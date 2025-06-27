@@ -4,7 +4,7 @@ const {cloudinaryUploadFile , cloudinaryRemoveFile} = require("../utils/cloudina
 const path = require("path");
 const fs = require("fs");
 const Enrollment = require('../models/Enrollment');
-
+const bcrypt = require('bcryptjs')
 /**
  * @description  Get All Users
  * @route  /api/users/profile
