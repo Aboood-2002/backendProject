@@ -8,8 +8,6 @@ const { handleWebhook } = require('./controllers/paymentController');
 
 const cors = require("cors")
 
-const xss = require("xss-clean");
-
 const rateLimiting = require("express-rate-limit");
 
 const helmet = require("helmet");
@@ -31,9 +29,6 @@ app.use(helmet());
 
 // Prevent Http Param Pollution
 app.use(hpp());
-
-// Prevent XSS(Cross Site Scripting) Attacks
-app.use(xss());
 
 // Rate Limiting
 app.use(rateLimiting({
