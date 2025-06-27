@@ -20,6 +20,14 @@ connectToDB()
 
 const app = express()
 
+app.use(cors({
+    origin : "*"
+}));
+
+app.post('/webhook',express.raw({ type: 'application/json' }), handleWebhook);
+
+
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
@@ -36,12 +44,6 @@ app.use(rateLimiting({
   max:200,
 }));
 
-
-app.use(cors({
-    origin : "*"
-}));
-
-app.post('/webhook',express.raw({ type: 'application/json' }), handleWebhook);
 
 
 //routes
